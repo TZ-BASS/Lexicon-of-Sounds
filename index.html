@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Solo Bass Generator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #111;
+      color: #f2f2f2;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .app {
+      width: min(900px, 92%);
+      margin: 0 auto;
+      padding: 50px 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 7vw, 70px);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      color: #888;
+      margin-top: 12px;
+      margin-bottom: 50px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    button {
+      border: 1px solid #555;
+      background: transparent;
+      color: white;
+      padding: 14px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    button:hover {
+      background: white;
+      color: black;
+    }
+
+    button.active {
+      background: white;
+      color: black;
+    }
+
+    #generate {
+      border-color: white;
+    }
+
+    .results {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .sound {
+      border-top: 1px solid #555;
+      padding-top: 20px;
+      padding-bottom: 30px;
+    }
+
+    .sound-number {
+      color: #777;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 25px;
+    }
+
+    .parameter {
+      margin-bottom: 20px;
+    }
+
+    .label {
+      color: #777;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 5px;
+    }
+
+    .value {
+      font-size: clamp(20px, 4vw, 34px);
+      text-transform: uppercase;
+    }
+
+    .interaction {
+      margin: 30px 0;
+      padding: 20px;
+      border: 1px solid #333;
+      font-size: clamp(17px, 3vw, 24px);
+      line-height: 1.5;
+    }
+
+    .arrow {
+      color: #777;
+      padding: 0 8px;
+    }
+
+    .footer {
+      margin-top: 60px;
+      border-top: 1px solid #333;
+      padding-top: 15px;
+      color: #666;
+      font-size: 12px;
+    }
+
+    @media (min-width: 700px) {
+      .results.two {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <h1>Solo Bass<br>Generator</h1>
+
+  <div class="subtitle">
+    Generative system for solo electric bass
+  </div>
+
+  <div class="controls">
+
+    <button id="oneSound" class="active">
+      1 Sound
+    </button>
+
+    <button id="twoSounds">
+      2 Sounds
+    </button>
+
+    <button id="generate">
+      Generate
+    </button>
+
+  </div>
+
+  <div id="results" class="results"></div>
+
+  <div class="footer">
+    Zones × Tools × Gestures × Mute states
+  </div>
+
+</div>
+
+
+<script>
+
+//
+// ================================
+// DATA
+// ================================
+//
+
+
+// ZONES
+
+const zones = [
+  "Micros",
+  "Manche",
+  "Tête",
+  "Corps de l'instrument",
+  "Hors-champ"
+];
+
+
+// GESTURES
+
+const gestures = [
+  "Frotter",
+  "Taper",
+  "Tirer"
+];
+
+
+// STATES
+
+const muteStates = [
+  "Muted",
+  "Unmuted"
+];
+
+
+// BODY TOOLS
+
+const bodyTools = [
+
+  "Pulpe du doigt",
+
+  "Ongle",
+
+  "Phalange interne",
+
+  "Phalange externe",
+
+  "Pouce"
+
+];
+
+
+// EXTERNAL TOOLS
+//
+// Chaque partie utilisable est considérée
+// comme une possibilité distincte.
+//
+
+const externalTools = [
+
+  // TAMBOURIN - 4
+
+  "Tambourin / peau",
+  "Tambourin / cadre",
+  "Tambourin / cymbalettes",
+  "Tambourin / partie 4",
+
+
+  // COUVERCLE - 3
+
+  "Couvercle / face",
+  "Couvercle / bord",
+  "Couvercle / partie 3",
+
+
+  // GAMELLE - 3
+
+  "Gamelle / face",
+  "Gamelle / bord",
+  "Gamelle / partie 3",
+
+
+  // CD - 3
+
+  "CD / face",
+  "CD / bord",
+  "CD / centre",
+
+
+  // REGLE - 2
+
+  "Règle / face",
+  "Règle / bord",
+
+
+  // OTHER
+
+  "Baguette",
+
+  "Chaînes",
+
+  "Vis"
+
+];
+
+
+//
+// ================================
+// SETTINGS
+// ================================
+//
+
+let numberOfSounds = 1;
+
+
+// Probability that a sound uses TWO tools
+
+const twoToolProbability = 0.70;
+
+
+//
+// ================================
+// RANDOM FUNCTION
+// ================================
+//
+
+function random(array) {
+
+  return array[
+    Math.floor(Math.random() * array.length)
+  ];
+
+}
+
+
+//
+// ================================
+// TOOL GENERATOR
+// ================================
+//
+
+function generateTools() {
+
+  const useTwoTools =
+    Math.random() < twoToolProbability;
+
+
+  //
+  // ONE TOOL
+  //
+
+  if (!useTwoTools) {
+
+    const allTools = [
+      ...bodyTools,
+      ...externalTools
+    ];
+
+    return {
+      first: random(allTools),
+      second: null
+    };
+
+  }
+
+
+  //
+  // TWO TOOLS
+  //
+
+  let first;
+  let second;
+
+
+  while (true) {
+
+    //
+    // FIRST TOOL
+    //
+
+    const allTools = [
+      ...bodyTools,
+      ...externalTools
+    ];
+
+    first = random(allTools);
+
+
+    //
+    // RULE:
+    //
+    // If first tool is BODY:
+    // second can be BODY or EXTERNAL
+    //
+    // If first tool is EXTERNAL:
+    // second must be EXTERNAL
+    //
+    // Therefore:
+    //
+    // CD → phalange
+    //
+    // cannot happen.
+    //
+
+
+    if (bodyTools.includes(first)) {
+
+      second = random([
+        ...bodyTools,
+        ...externalTools
+      ]);
+
+    } else {
+
+      second = random(externalTools);
+
+    }
+
+
+    //
+    // Prevent exact same tool
+    //
+
+    if (first !== second) {
+
+      break;
+
+    }
+
+  }
+
+
+  return {
+    first,
+    second
+  };
+
+}
+
+
+//
+// ================================
+// SOUND GENERATOR
+// ================================
+//
+
+function generateSound() {
+
+  const tools = generateTools();
+
+  return {
+
+    zone: random(zones),
+
+    gesture: random(gestures),
+
+    mute: random(muteStates),
+
+    firstTool: tools.first,
+
+    secondTool: tools.second
+
+  };
+
+}
+
+
+//
+// ================================
+// DISPLAY
+// ================================
+//
+
+function soundHTML(sound, number) {
+
+  let interaction;
+
+
+  if (sound.secondTool) {
+
+    interaction = `
+
+      ${sound.firstTool}
+
+      <span class="arrow">→</span>
+
+      ${sound.gesture}
+
+      <span class="arrow">→</span>
+
+      ${sound.secondTool}
+
+      <span class="arrow">→</span>
+
+      ${sound.zone}
+
+    `;
+
+  }
+
+  else {
+
+    interaction = `
+
+      ${sound.firstTool}
+
+      <span class="arrow">→</span>
+
+      ${sound.gesture}
+
+      <span class="arrow">→</span>
+
+      ${sound.zone}
+
+    `;
+
+  }
+
+
+  return `
+
+    <div class="sound">
+
+      <div class="sound-number">
+        Sound ${number}
+      </div>
+
+
+      <div class="parameter">
+
+        <div class="label">
+          Gesture
+        </div>
+
+        <div class="value">
+          ${sound.gesture}
+        </div>
+
+      </div>
+
+
+      <div class="parameter">
+
+        <div class="label">
+          Tool interaction
+        </div>
+
+        <div class="value">
+
+          ${sound.firstTool}
+
+          ${
+            sound.secondTool
+            ? " + " + sound.secondTool
+            : ""
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="parameter">
+
+        <div class="label">
+          Zone
+        </div>
+
+        <div class="value">
+          ${sound.zone}
+        </div>
+
+      </div>
+
+
+      <div class="parameter">
+
+        <div class="label">
+          State
+        </div>
+
+        <div class="value">
+          ${sound.mute}
+        </div>
+
+      </div>
+
+
+      <div class="interaction">
+
+        ${interaction}
+
+        <br><br>
+
+        ${sound.mute}
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+//
+// ================================
+// GENERATE
+// ================================
+//
+
+function generate() {
+
+  const results =
+    document.getElementById("results");
+
+
+  results.innerHTML = "";
+
+
+  if (numberOfSounds === 2) {
+
+    results.classList.add("two");
+
+  }
+
+  else {
+
+    results.classList.remove("two");
+
+  }
+
+
+  for (
+    let i = 0;
+    i < numberOfSounds;
+    i++
+  ) {
+
+    const sound =
+      generateSound();
+
+
+    results.innerHTML +=
+      soundHTML(sound, i + 1);
+
+  }
+
+}
+
+
+//
+// ================================
+// BUTTONS
+// ================================
+//
+
+const oneSoundButton =
+  document.getElementById("oneSound");
+
+const twoSoundsButton =
+  document.getElementById("twoSounds");
+
+const generateButton =
+  document.getElementById("generate");
+
+
+
+oneSoundButton.addEventListener(
+  "click",
+  function () {
+
+    numberOfSounds = 1;
+
+    oneSoundButton.classList.add("active");
+
+    twoSoundsButton.classList.remove("active");
+
+    generate();
+
+  }
+);
+
+
+
+twoSoundsButton.addEventListener(
+  "click",
+  function () {
+
+    numberOfSounds = 2;
+
+    twoSoundsButton.classList.add("active");
+
+    oneSoundButton.classList.remove("active");
+
+    generate();
+
+  }
+);
+
+
+
+generateButton.addEventListener(
+  "click",
+  generate
+);
+
+
+// Generate first result
+
+generate();
+
+
+</script>
+
+</body>
+</html>
