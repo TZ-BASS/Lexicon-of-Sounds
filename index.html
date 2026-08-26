@@ -33,7 +33,7 @@ body {
   grid-template-columns: 1fr 300px;
   gap: 40px;
   align-items: start;
-  margin-bottom: 50px;
+  margin-bottom: 45px;
 }
 
 h1 {
@@ -51,6 +51,15 @@ h1 {
   letter-spacing: 0.13em;
   line-height: 1.6;
   text-transform: uppercase;
+}
+
+.description {
+  margin-top: 10px;
+  max-width: 620px;
+  color: #666;
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.03em;
 }
 
 
@@ -75,23 +84,18 @@ h1 {
 .controls {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 45px;
+  margin-bottom: 40px;
 }
 
 button {
   padding: 16px 28px;
-
   border: 1px solid #eee;
-
   background: transparent;
   color: #eee;
-
   font-family: inherit;
   font-size: 12px;
-
   letter-spacing: 0.15em;
   text-transform: uppercase;
-
   cursor: pointer;
 }
 
@@ -101,12 +105,16 @@ button:hover {
 }
 
 
-/* TWO HANDS */
+/* RESULTS */
 
 .results {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 35px;
+}
+
+.results.two-hands {
+  grid-template-columns: 1fr 1fr;
 }
 
 .hand {
@@ -116,11 +124,8 @@ button:hover {
 
 .hand-title {
   margin-bottom: 32px;
-
   color: #888;
-
   font-size: 11px;
-
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
@@ -134,22 +139,16 @@ button:hover {
 
 .label {
   margin-bottom: 7px;
-
   color: #666;
-
   font-size: 10px;
-
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .value {
   font-size: clamp(21px, 3vw, 35px);
-
   line-height: 1.1;
-
   letter-spacing: -0.025em;
-
   text-transform: uppercase;
 }
 
@@ -163,25 +162,19 @@ button:hover {
 .tool-relation {
   display: flex;
   flex-wrap: wrap;
-
   align-items: center;
-
   gap: 10px;
 }
 
 .tool-item {
   display: inline-flex;
-
   align-items: center;
-
   gap: 10px;
 }
 
 .on {
   color: #666;
-
   font-size: 10px;
-
   letter-spacing: 0.15em;
 }
 
@@ -189,143 +182,54 @@ button:hover {
 /* ICONS */
 
 .tool-icon {
-
   width: 42px;
   height: 42px;
-
   flex-shrink: 0;
-
 }
 
 .tool-icon svg {
-
   width: 100%;
   height: 100%;
-
   fill: none;
-
   stroke: #f4f4f0;
-
   stroke-width: 1.6;
-
   stroke-linecap: round;
   stroke-linejoin: round;
-
 }
 
 
-/* ACTION */
-
-.action {
-
-  margin-top: 35px;
-
-  padding: 22px;
-
-  border: 1px solid #333;
-
-}
-
-.action-label {
-
-  margin-bottom: 17px;
-
-  color: #666;
-
-  font-size: 10px;
-
-  letter-spacing: 0.18em;
-
-  text-transform: uppercase;
-
-}
-
-.action-chain {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  align-items: center;
-
-  gap: 9px;
-
-  font-size: clamp(15px, 2vw, 21px);
-
-  line-height: 1.5;
-
-  text-transform: uppercase;
-
-}
-
-.action-chain .tool-icon {
-
-  width: 30px;
-  height: 30px;
-
-}
-
-.arrow {
-
-  color: #555;
-
-}
-
-
-/* GLOBAL MUTE */
+/* GLOBAL STATE */
 
 .global-state {
-
-  margin-top: 55px;
-
-  padding: 25px 0;
-
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-
+  margin-top: 35px;
+  padding-top: 20px;
+  border-top: 1px solid #444;
 }
 
 .global-state-label {
-
-  margin-bottom: 10px;
-
-  color: #777;
-
+  margin-bottom: 7px;
+  color: #666;
   font-size: 10px;
-
   letter-spacing: 0.18em;
-
   text-transform: uppercase;
-
 }
 
 .global-state-value {
-
-  font-size: clamp(40px, 7vw, 76px);
-
-  line-height: 1;
-
-  letter-spacing: -0.04em;
-
+  font-size: clamp(21px, 3vw, 35px);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
-
 }
 
 
 /* FOOTER */
 
 .footer {
-
   margin-top: 45px;
-
   color: #505050;
-
   font-size: 10px;
-
   letter-spacing: 0.14em;
-
   text-transform: uppercase;
-
 }
 
 
@@ -341,7 +245,7 @@ button:hover {
     width: 230px;
   }
 
-  .results {
+  .results.two-hands {
     grid-template-columns: 1fr;
   }
 
@@ -372,9 +276,11 @@ button:hover {
     </h1>
 
     <div class="subtitle">
-
       Generative system for solo electric bass by Théo Zipper
+    </div>
 
+    <div class="description">
+      A little generative tool to find counter-intuitive new sounds &amp; positions on prepared bass guitar with objects
     </div>
 
   </div>
@@ -421,9 +327,7 @@ button:hover {
 <div class="global-state">
 
   <div class="global-state-label">
-
     Instrument State
-
   </div>
 
   <div
@@ -437,9 +341,7 @@ button:hover {
 
 
 <div class="footer">
-
-  Two Hands × Playing Modes × Tool Interactions × Playing Areas × Instrument State
-
+  Hands × Playing Modes × Tool Interactions × Playing Areas × Instrument State
 </div>
 
 
@@ -515,10 +417,6 @@ const externalTools = [
 // ==========================================
 // SINGLE TOOL POSSIBILITIES
 // ==========================================
-//
-// Fingers only appears when acting
-// directly on the strings.
-//
 
 const singleTools = [
 
@@ -547,9 +445,6 @@ const instrumentStates = [
 // ==========================================
 // SETTINGS
 // ==========================================
-//
-// Probability of TWO tools interacting
-//
 
 const twoToolProbability = 0.70;
 
@@ -856,14 +751,7 @@ function generateToolInteraction() {
 
 
 
-  // ----------------------------------------
   // ONE TOOL
-  //
-  // A single tool always acts
-  // directly ON STRINGS.
-  //
-  // Fingers can appear here.
-  // ----------------------------------------
 
   if (!useTwoTools) {
 
@@ -884,17 +772,7 @@ function generateToolInteraction() {
 
 
 
-  // ----------------------------------------
   // TWO TOOLS
-  //
-  // Direction matters:
-  //
-  // CHAIN ON TAMBOURINE
-  //
-  // is different from
-  //
-  // TAMBOURINE ON CHAIN
-  // ----------------------------------------
 
   let actingTool;
 
@@ -1042,54 +920,6 @@ function interactionHTML(hand) {
 
 
 // ==========================================
-// COMPACT ACTION DISPLAY
-// ==========================================
-
-function compactInteractionHTML(hand) {
-
-
-  if (hand.directOnStrings) {
-
-    return `
-
-      ${toolItem(
-        hand.actingTool
-      )}
-
-      <span class="on">
-
-        ON STRINGS
-
-      </span>
-
-    `;
-
-  }
-
-
-  return `
-
-    ${toolItem(
-      hand.actingTool
-    )}
-
-    <span class="on">
-
-      ON
-
-    </span>
-
-    ${toolItem(
-      hand.receivingTool
-    )}
-
-  `;
-
-}
-
-
-
-// ==========================================
 // HAND HTML
 // ==========================================
 
@@ -1168,62 +998,73 @@ function handHTML(hand) {
       </div>
 
 
-
-      <!-- COMPLETE ACTION -->
-
-      <div class="action">
-
-        <div class="action-label">
-
-          Action
-
-        </div>
-
-
-        <div class="action-chain">
-
-
-          <span>
-
-            ${hand.mode}
-
-          </span>
-
-
-          <span class="arrow">
-
-            →
-
-          </span>
-
-
-          ${compactInteractionHTML(
-            hand
-          )}
-
-
-          <span class="arrow">
-
-            →
-
-          </span>
-
-
-          <span>
-
-            ${hand.playingArea}
-
-          </span>
-
-
-        </div>
-
-      </div>
-
-
     </section>
 
   `;
+
+}
+
+
+
+// ==========================================
+// RANDOM HAND CONFIGURATION
+// ==========================================
+//
+// 3 equally possible situations:
+//
+// LEFT HAND ONLY
+// RIGHT HAND ONLY
+// BOTH HANDS
+//
+
+function generateHands() {
+
+
+  const configuration =
+    random([
+      "left",
+      "right",
+      "both"
+    ]);
+
+
+  if (configuration === "left") {
+
+    return [
+
+      generateHand(
+        "Left Hand"
+      )
+
+    ];
+
+  }
+
+
+  if (configuration === "right") {
+
+    return [
+
+      generateHand(
+        "Right Hand"
+      )
+
+    ];
+
+  }
+
+
+  return [
+
+    generateHand(
+      "Left Hand"
+    ),
+
+    generateHand(
+      "Right Hand"
+    )
+
+  ];
 
 }
 
@@ -1236,39 +1077,46 @@ function handHTML(hand) {
 function generate() {
 
 
-  // TWO HANDS ARE ALWAYS ACTIVE
+  const hands =
+    generateHands();
 
-  const leftHand =
-    generateHand(
-      "Left Hand"
+
+  const results =
+    document.getElementById(
+      "results"
     );
 
 
-  const rightHand =
-    generateHand(
-      "Right Hand"
+  // TWO COLUMNS ONLY
+  // WHEN BOTH HANDS ARE USED
+
+  if (hands.length === 2) {
+
+    results.classList.add(
+      "two-hands"
     );
 
+  }
 
+  else {
 
-  document.getElementById(
-    "results"
-  ).innerHTML =
-
-    handHTML(
-      leftHand
-    )
-
-    +
-
-    handHTML(
-      rightHand
+    results.classList.remove(
+      "two-hands"
     );
 
+  }
 
 
-  // ONE GLOBAL MUTE STATE
-  // FOR THE WHOLE INSTRUMENT
+  results.innerHTML =
+
+    hands
+      .map(
+        handHTML
+      )
+      .join("");
+
+
+  // GLOBAL INSTRUMENT STATE
 
   document.getElementById(
     "globalMuteState"
