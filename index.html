@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Solo Bass Generator</title>
+  <title>Lexicon of Sounds</title>
 
   <style>
     * {
@@ -13,147 +13,300 @@
 
     body {
       margin: 0;
-      background: #111;
-      color: #f2f2f2;
-      font-family: Arial, Helvetica, sans-serif;
+      background: #0d0d0d;
+      color: #f4f4f0;
+      font-family: Futura, "Futura PT", "Avenir Next", Arial, sans-serif;
     }
 
     .app {
-      width: min(900px, 92%);
+      width: min(1050px, 90%);
       margin: 0 auto;
-      padding: 50px 0;
+      padding: 60px 0 45px;
     }
+
+    /* =========================
+       HEADER
+       ========================= */
 
     h1 {
       margin: 0;
-      font-size: clamp(32px, 7vw, 70px);
-      line-height: 0.95;
-      letter-spacing: -0.04em;
+      font-size: clamp(40px, 8vw, 82px);
+      line-height: 0.9;
+      letter-spacing: -0.045em;
       text-transform: uppercase;
+      font-weight: 700;
     }
 
     .subtitle {
-      color: #888;
-      margin-top: 12px;
-      margin-bottom: 50px;
+      margin-top: 18px;
+      margin-bottom: 55px;
+      color: #777;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
+
+    /* =========================
+       CONTROLS
+       ========================= */
 
     .controls {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 30px;
+      margin-bottom: 50px;
     }
 
     button {
-      border: 1px solid #555;
+      min-height: 46px;
+      padding: 0 20px;
+
+      border: 1px solid #444;
       background: transparent;
-      color: white;
-      padding: 14px 20px;
-      font-size: 14px;
-      cursor: pointer;
+      color: #eee;
+
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+
+      cursor: pointer;
+
+      transition:
+        background 0.15s ease,
+        color 0.15s ease,
+        border-color 0.15s ease;
     }
 
     button:hover {
-      background: white;
-      color: black;
+      border-color: #eee;
     }
 
     button.active {
-      background: white;
-      color: black;
+      background: #eee;
+      color: #111;
+      border-color: #eee;
     }
 
     #generate {
-      border-color: white;
+      border-color: #eee;
+      margin-left: auto;
     }
+
+    #generate:hover {
+      background: #eee;
+      color: #111;
+    }
+
+    /* =========================
+       RESULTS
+       ========================= */
 
     .results {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 45px;
     }
 
-    .sound {
-      border-top: 1px solid #555;
-      padding-top: 20px;
-      padding-bottom: 30px;
+    .hand {
+      border-top: 1px solid #444;
+      padding-top: 18px;
+      padding-bottom: 10px;
     }
 
-    .sound-number {
-      color: #777;
-      font-size: 12px;
+    .hand-title {
+      margin-bottom: 35px;
+      color: #888;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 25px;
     }
+
+    /* =========================
+       PARAMETERS
+       ========================= */
 
     .parameter {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     .label {
-      color: #777;
-      font-size: 11px;
+      margin-bottom: 7px;
+      color: #666;
+      font-size: 10px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 5px;
     }
 
     .value {
-      font-size: clamp(20px, 4vw, 34px);
+      font-size: clamp(22px, 4vw, 38px);
+      line-height: 1.08;
+      letter-spacing: -0.025em;
       text-transform: uppercase;
     }
 
-    .interaction {
-      margin: 30px 0;
-      padding: 20px;
+    /* =========================
+       TOOL INTERACTION
+       ========================= */
+
+    .tool-relation {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 9px;
+    }
+
+    .on {
+      color: #666;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+    }
+
+    /* =========================
+       ACTION CHAIN
+       ========================= */
+
+    .action {
+      margin-top: 38px;
+      padding: 25px;
       border: 1px solid #333;
-      font-size: clamp(17px, 3vw, 24px);
-      line-height: 1.5;
+    }
+
+    .action-label {
+      margin-bottom: 18px;
+      color: #666;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .action-chain {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+
+      font-size: clamp(17px, 2.5vw, 25px);
+      line-height: 1.4;
+      text-transform: uppercase;
     }
 
     .arrow {
-      color: #777;
-      padding: 0 8px;
+      color: #555;
+      font-size: 16px;
     }
+
+    /* =========================
+       GLOBAL INSTRUMENT STATE
+       ========================= */
+
+    .global-state {
+      margin-top: 55px;
+
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+
+      padding: 25px 0;
+    }
+
+    .global-state-label {
+      color: #777;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .global-state-value {
+      font-size: clamp(38px, 7vw, 72px);
+      line-height: 1;
+      letter-spacing: -0.035em;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       FOOTER
+       ========================= */
 
     .footer {
-      margin-top: 60px;
-      border-top: 1px solid #333;
-      padding-top: 15px;
-      color: #666;
-      font-size: 12px;
+      margin-top: 55px;
+      color: #555;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
 
-    @media (min-width: 700px) {
+    /* =========================
+       DESKTOP
+       ========================= */
+
+    @media (min-width: 760px) {
+
       .results.two {
         grid-template-columns: 1fr 1fr;
       }
+
     }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 600px) {
+
+      .app {
+        width: 92%;
+        padding-top: 40px;
+      }
+
+      .controls {
+        margin-bottom: 40px;
+      }
+
+      #generate {
+        margin-left: 0;
+        width: 100%;
+        margin-top: 5px;
+      }
+
+    }
+
   </style>
 </head>
+
 
 <body>
 
 <div class="app">
 
-  <h1>Solo Bass<br>Generator</h1>
+  <!-- =========================
+       HEADER
+       ========================= -->
+
+  <h1>
+    Lexicon<br>
+    of Sounds
+  </h1>
 
   <div class="subtitle">
     Generative system for solo electric bass
   </div>
 
+
+  <!-- =========================
+       CONTROLS
+       ========================= -->
+
   <div class="controls">
 
-    <button id="oneSound" class="active">
-      1 Sound
+    <button id="oneHand" class="active">
+      One Hand
     </button>
 
-    <button id="twoSounds">
-      2 Sounds
+    <button id="twoHands">
+      Two Hands
     </button>
 
     <button id="generate">
@@ -162,159 +315,158 @@
 
   </div>
 
+
+  <!-- =========================
+       HAND RESULTS
+       ========================= -->
+
   <div id="results" class="results"></div>
 
+
+  <!-- =========================
+       GLOBAL INSTRUMENT STATE
+       ========================= -->
+
+  <div class="global-state">
+
+    <div class="global-state-label">
+      Instrument State
+    </div>
+
+    <div
+      id="globalMuteState"
+      class="global-state-value"
+    >
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       FOOTER
+       ========================= -->
+
   <div class="footer">
-    Zones × Tools × Gestures × Mute states
+    Tools × Playing Areas × Instrument State
   </div>
 
 </div>
 
 
+
 <script>
 
 //
-// ================================
-// DATA
-// ================================
+// ========================================
+// PLAYING AREAS
+// ========================================
 //
 
+const playingAreas = [
 
-// ZONES
+  "Pickups",
 
-const zones = [
-  "Micros",
-  "Manche",
-  "Tête",
-  "Corps de l'instrument",
-  "Hors-champ"
+  "Neck",
+
+  "Headstock",
+
+  "Body",
+
+  "Off-instrument"
+
 ];
 
 
-// GESTURES
+//
+// ========================================
+// TOOLS
+// ========================================
+//
+// Only external tools are included
+// at this stage.
+//
 
-const gestures = [
-  "Frotter",
-  "Taper",
-  "Tirer"
+const tools = [
+
+  "Tambourine",
+
+  "Lid",
+
+  "Bowl",
+
+  "CD",
+
+  "Ruler",
+
+  "Drumstick",
+
+  "Chain",
+
+  "Screw"
+
 ];
 
 
-// STATES
+//
+// ========================================
+// GLOBAL INSTRUMENT STATES
+// ========================================
+//
+// This state applies to the WHOLE instrument,
+// not to an individual hand.
+//
 
-const muteStates = [
+const instrumentStates = [
+
   "Muted",
+
   "Unmuted"
-];
-
-
-// BODY TOOLS
-
-const bodyTools = [
-
-  "Pulpe du doigt",
-
-  "Ongle",
-
-  "Phalange interne",
-
-  "Phalange externe",
-
-  "Pouce"
-
-];
-
-
-// EXTERNAL TOOLS
-//
-// Chaque partie utilisable est considérée
-// comme une possibilité distincte.
-//
-
-const externalTools = [
-
-  // TAMBOURIN - 4
-
-  "Tambourin / peau",
-  "Tambourin / cadre",
-  "Tambourin / cymbalettes",
-  "Tambourin / partie 4",
-
-
-  // COUVERCLE - 3
-
-  "Couvercle / face",
-  "Couvercle / bord",
-  "Couvercle / partie 3",
-
-
-  // GAMELLE - 3
-
-  "Gamelle / face",
-  "Gamelle / bord",
-  "Gamelle / partie 3",
-
-
-  // CD - 3
-
-  "CD / face",
-  "CD / bord",
-  "CD / centre",
-
-
-  // REGLE - 2
-
-  "Règle / face",
-  "Règle / bord",
-
-
-  // OTHER
-
-  "Baguette",
-
-  "Chaînes",
-
-  "Vis"
 
 ];
 
 
 //
-// ================================
+// ========================================
 // SETTINGS
-// ================================
+// ========================================
 //
 
-let numberOfSounds = 1;
+let numberOfHands = 1;
 
 
-// Probability that a sound uses TWO tools
+// Probability that a hand uses
+// TWO tools instead of one.
+//
+// 0.70 = 70%
+//
 
 const twoToolProbability = 0.70;
 
 
 //
-// ================================
+// ========================================
 // RANDOM FUNCTION
-// ================================
+// ========================================
 //
 
 function random(array) {
 
   return array[
-    Math.floor(Math.random() * array.length)
+    Math.floor(
+      Math.random() * array.length
+    )
   ];
 
 }
 
 
 //
-// ================================
-// TOOL GENERATOR
-// ================================
+// ========================================
+// TOOL INTERACTION GENERATOR
+// ========================================
 //
 
-function generateTools() {
+function generateToolInteraction() {
 
   const useTwoTools =
     Math.random() < twoToolProbability;
@@ -326,14 +478,14 @@ function generateTools() {
 
   if (!useTwoTools) {
 
-    const allTools = [
-      ...bodyTools,
-      ...externalTools
-    ];
-
     return {
-      first: random(allTools),
-      second: null
+
+      actingTool:
+        random(tools),
+
+      receivingTool:
+        null
+
     };
 
   }
@@ -342,98 +494,41 @@ function generateTools() {
   //
   // TWO TOOLS
   //
+  // The ORDER is important.
+  //
+  // Example:
+  //
+  // DRUMSTICK ON LID
+  //
+  // is a different action from:
+  //
+  // LID ON DRUMSTICK
+  //
 
-  let first;
-  let second;
-
-
-  while (true) {
-
-    //
-    // FIRST TOOL
-    //
-
-    const allTools = [
-      ...bodyTools,
-      ...externalTools
-    ];
-
-    first = random(allTools);
+  let actingTool;
+  let receivingTool;
 
 
-    //
-    // RULE:
-    //
-    // If first tool is BODY:
-    // second can be BODY or EXTERNAL
-    //
-    // If first tool is EXTERNAL:
-    // second must be EXTERNAL
-    //
-    // Therefore:
-    //
-    // CD → phalange
-    //
-    // cannot happen.
-    //
+  do {
 
+    actingTool =
+      random(tools);
 
-    if (bodyTools.includes(first)) {
-
-      second = random([
-        ...bodyTools,
-        ...externalTools
-      ]);
-
-    } else {
-
-      second = random(externalTools);
-
-    }
-
-
-    //
-    // Prevent exact same tool
-    //
-
-    if (first !== second) {
-
-      break;
-
-    }
+    receivingTool =
+      random(tools);
 
   }
 
+  while (
+    actingTool === receivingTool
+  );
 
-  return {
-    first,
-    second
-  };
-
-}
-
-
-//
-// ================================
-// SOUND GENERATOR
-// ================================
-//
-
-function generateSound() {
-
-  const tools = generateTools();
 
   return {
 
-    zone: random(zones),
+    actingTool,
 
-    gesture: random(gestures),
-
-    mute: random(muteStates),
-
-    firstTool: tools.first,
-
-    secondTool: tools.second
+    receivingTool
 
   };
 
@@ -441,135 +536,188 @@ function generateSound() {
 
 
 //
-// ================================
-// DISPLAY
-// ================================
+// ========================================
+// HAND GENERATOR
+// ========================================
 //
 
-function soundHTML(sound, number) {
+function generateHand(handName) {
 
-  let interaction;
+  const interaction =
+    generateToolInteraction();
 
 
-  if (sound.secondTool) {
+  return {
 
-    interaction = `
+    handName:
 
-      ${sound.firstTool}
+      handName,
 
-      <span class="arrow">→</span>
 
-      ${sound.gesture}
+    playingArea:
 
-      <span class="arrow">→</span>
+      random(playingAreas),
 
-      ${sound.secondTool}
 
-      <span class="arrow">→</span>
+    actingTool:
 
-      ${sound.zone}
+      interaction.actingTool,
+
+
+    receivingTool:
+
+      interaction.receivingTool
+
+  };
+
+}
+
+
+//
+// ========================================
+// TOOL DISPLAY
+// ========================================
+//
+
+function toolHTML(hand) {
+
+  //
+  // TWO TOOLS
+  //
+
+  if (hand.receivingTool) {
+
+    return `
+
+      <div class="tool-relation">
+
+        <span>
+          ${hand.actingTool}
+        </span>
+
+        <span class="on">
+          ON
+        </span>
+
+        <span>
+          ${hand.receivingTool}
+        </span>
+
+      </div>
 
     `;
 
   }
 
-  else {
 
-    interaction = `
+  //
+  // ONE TOOL
+  //
 
-      ${sound.firstTool}
+  return `
 
-      <span class="arrow">→</span>
+    <span>
+      ${hand.actingTool}
+    </span>
 
-      ${sound.gesture}
+  `;
 
-      <span class="arrow">→</span>
+}
 
-      ${sound.zone}
 
-    `;
+//
+// ========================================
+// HAND DISPLAY
+// ========================================
+//
 
-  }
+function handHTML(hand) {
+
+  const toolsDisplay =
+    toolHTML(hand);
 
 
   return `
 
-    <div class="sound">
+    <div class="hand">
 
-      <div class="sound-number">
-        Sound ${number}
+
+      <!-- HAND -->
+
+      <div class="hand-title">
+
+        ${hand.handName}
+
       </div>
 
+
+      <!-- TOOL -->
 
       <div class="parameter">
 
         <div class="label">
-          Gesture
+          Tool
         </div>
 
         <div class="value">
-          ${sound.gesture}
+
+          ${toolsDisplay}
+
         </div>
 
       </div>
 
+
+      <!-- PLAYING AREA -->
 
       <div class="parameter">
 
         <div class="label">
-          Tool interaction
+          Playing Area
         </div>
 
         <div class="value">
 
-          ${sound.firstTool}
-
-          ${
-            sound.secondTool
-            ? " + " + sound.secondTool
-            : ""
-          }
+          ${hand.playingArea}
 
         </div>
 
       </div>
 
 
-      <div class="parameter">
+      <!-- ACTION -->
 
-        <div class="label">
-          Zone
+      <div class="action">
+
+        <div class="action-label">
+          Action
         </div>
 
-        <div class="value">
-          ${sound.zone}
+
+        <div class="action-chain">
+
+          <span>
+
+            ${toolsDisplay}
+
+          </span>
+
+
+          <span class="arrow">
+            →
+          </span>
+
+
+          <span>
+
+            ${hand.playingArea}
+
+          </span>
+
         </div>
 
       </div>
 
-
-      <div class="parameter">
-
-        <div class="label">
-          State
-        </div>
-
-        <div class="value">
-          ${sound.mute}
-        </div>
-
-      </div>
-
-
-      <div class="interaction">
-
-        ${interaction}
-
-        <br><br>
-
-        ${sound.mute}
-
-      </div>
 
     </div>
 
@@ -579,45 +727,108 @@ function soundHTML(sound, number) {
 
 
 //
-// ================================
-// GENERATE
-// ================================
+// ========================================
+// GENERATE COMPLETE CONFIGURATION
+// ========================================
 //
 
 function generate() {
 
   const results =
-    document.getElementById("results");
+    document.getElementById(
+      "results"
+    );
 
 
-  results.innerHTML = "";
+  //
+  // GENERATE GLOBAL INSTRUMENT STATE
+  //
+  // Only ONE state is generated.
+  //
+  // In Two Hands mode,
+  // BOTH hands share this state.
+  //
+
+  const globalState =
+    random(instrumentStates);
 
 
-  if (numberOfSounds === 2) {
+  document.getElementById(
+    "globalMuteState"
+  ).textContent =
+    globalState;
 
-    results.classList.add("two");
+
+  //
+  // ONE HAND MODE
+  //
+
+  if (numberOfHands === 1) {
+
+    results.classList.remove(
+      "two"
+    );
+
+
+    const leftHand =
+      generateHand(
+        "Left Hand"
+      );
+
+
+    results.innerHTML =
+      handHTML(
+        leftHand
+      );
 
   }
+
+
+  //
+  // TWO HANDS MODE
+  //
 
   else {
 
-    results.classList.remove("two");
-
-  }
-
-
-  for (
-    let i = 0;
-    i < numberOfSounds;
-    i++
-  ) {
-
-    const sound =
-      generateSound();
+    results.classList.add(
+      "two"
+    );
 
 
-    results.innerHTML +=
-      soundHTML(sound, i + 1);
+    //
+    // Each hand is generated
+    // independently.
+    //
+    // Therefore each hand can:
+    //
+    // - use different tools
+    // - use one or two tools
+    // - play on a different area
+    //
+
+    const leftHand =
+      generateHand(
+        "Left Hand"
+      );
+
+
+    const rightHand =
+      generateHand(
+        "Right Hand"
+      );
+
+
+    results.innerHTML =
+
+      handHTML(
+        leftHand
+      )
+
+      +
+
+      handHTML(
+        rightHand
+      );
 
   }
 
@@ -625,63 +836,113 @@ function generate() {
 
 
 //
-// ================================
+// ========================================
 // BUTTONS
-// ================================
+// ========================================
 //
 
-const oneSoundButton =
-  document.getElementById("oneSound");
+const oneHandButton =
+  document.getElementById(
+    "oneHand"
+  );
 
-const twoSoundsButton =
-  document.getElementById("twoSounds");
+
+const twoHandsButton =
+  document.getElementById(
+    "twoHands"
+  );
+
 
 const generateButton =
-  document.getElementById("generate");
+  document.getElementById(
+    "generate"
+  );
 
 
+//
+// ========================================
+// ONE HAND BUTTON
+// ========================================
+//
 
-oneSoundButton.addEventListener(
+oneHandButton.addEventListener(
+
   "click",
+
   function () {
 
-    numberOfSounds = 1;
+    numberOfHands = 1;
 
-    oneSoundButton.classList.add("active");
 
-    twoSoundsButton.classList.remove("active");
+    oneHandButton.classList.add(
+      "active"
+    );
+
+
+    twoHandsButton.classList.remove(
+      "active"
+    );
+
 
     generate();
 
   }
+
 );
 
 
+//
+// ========================================
+// TWO HANDS BUTTON
+// ========================================
+//
 
-twoSoundsButton.addEventListener(
+twoHandsButton.addEventListener(
+
   "click",
+
   function () {
 
-    numberOfSounds = 2;
+    numberOfHands = 2;
 
-    twoSoundsButton.classList.add("active");
 
-    oneSoundButton.classList.remove("active");
+    twoHandsButton.classList.add(
+      "active"
+    );
+
+
+    oneHandButton.classList.remove(
+      "active"
+    );
+
 
     generate();
 
   }
+
 );
 
 
+//
+// ========================================
+// GENERATE BUTTON
+// ========================================
+//
 
 generateButton.addEventListener(
+
   "click",
+
   generate
+
 );
 
 
-// Generate first result
+//
+// ========================================
+// INITIAL GENERATION
+// ========================================
+//
 
 generate();
 
